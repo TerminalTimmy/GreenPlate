@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GreenPlate — The plate you grew up with, from the fields around you now</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --forest: #2F6B4F;
+    --forest-deep: #1F4433;
+    --parchment: #FDFBF3;
+    --parchment-card: #F3EFDE;
+    --leaf-light: #E4F0DC;
+    --ochre: #E3A93C;
+    --ochre-deep: #C4841E;
+    --clay: #B0502F;
+    --ink: #1A2A20;
+    --ink-soft: #4A5A4F;
+    --line: rgba(18,38,28,0.14);
+    --line-on-dark: rgba(246,241,228,0.18);
+    --radius-s: 6px;
+    --radius-m: 14px;
+    --serif: "Fraunces", Georgia, "Times New Roman", serif;
+    --sans: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --parchment: #FDFBF3;
+      --parchment-card: #F3EFDE;
+      --leaf-light: #E4F0DC;
+      --ink: #1A2A20;
+      --ink-soft: #4A5A4F;
+      --line: rgba(18,38,28,0.14);
+    }
+  }
+  :root[data-theme="dark"]{
+    --parchment: #FDFBF3;
+    --parchment-card: #F3EFDE;
+    --leaf-light: #E4F0DC;
+    --ink: #1A2A20;
+    --ink-soft: #4A5A4F;
+    --line: rgba(18,38,28,0.14);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--parchment);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  img,svg{max-width:100%;display:block;}
+  a{color:inherit;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+  section{padding:96px 0;}
+  h1,h2,h3{font-family:var(--serif);font-weight:600;margin:0;color:var(--ink);}
+  p{margin:0;}
+  .lede{max-width:62ch;}
+
+  /* ---------- Nav ---------- */
+  header.site{
+    position:sticky;top:0;z-index:40;
+    background:color-mix(in srgb, var(--parchment) 90%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;max-width:1180px;margin:0 auto;}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:1.28rem;font-weight:700;color:var(--ink);text-decoration:none;}
+  .brand .leaf{width:26px;height:26px;flex:none;}
+  .navlinks{display:flex;gap:32px;align-items:center;font-size:0.95rem;font-weight:500;}
+  .navlinks a{text-decoration:none;color:var(--ink-soft);transition:color .15s ease;}
+  .navlinks a:hover{color:var(--ink);}
+  .navcta{background:var(--forest);color:#FFFFFF;padding:10px 20px;border-radius:999px;font-weight:600;font-size:0.92rem;text-decoration:none;white-space:nowrap;}
+  .navcta:hover{background:var(--forest-deep);}
+  .navtoggle{display:none;}
+
+  /* ---------- Hero ---------- */
+  .hero{padding:76px 0 40px;background:var(--leaf-light);}
+  .hero-grid{display:grid;grid-template-columns:1.05fr 0.85fr;gap:56px;align-items:center;}
+  .kicker{
+    font-family:var(--serif);font-style:italic;font-weight:500;
+    color:var(--clay);font-size:1.05rem;margin-bottom:18px;display:block;
+  }
+  .hero h1{font-size:clamp(2.3rem, 4vw, 3.6rem);line-height:1.08;letter-spacing:-0.01em;max-width:16ch;}
+  .hero .sub{margin-top:26px;font-size:1.14rem;color:var(--ink-soft);max-width:46ch;}
+  .hero-ctas{display:flex;gap:16px;margin-top:36px;flex-wrap:wrap;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:14px 26px;border-radius:999px;font-weight:600;font-size:0.98rem;
+    text-decoration:none;border:1px solid transparent;cursor:pointer;font-family:var(--sans);
+  }
+  .btn-primary{background:var(--ochre);color:var(--ink);}
+  .btn-primary:hover{background:var(--ochre-deep);color:#FFFFFF;}
+  .btn-ghost{border-color:var(--forest);color:var(--forest);background:var(--parchment);}
+  .btn-ghost:hover{background:var(--parchment-card);}
+  .hero-proof{margin-top:44px;display:flex;gap:34px;flex-wrap:wrap;}
+  .proof-item{border-left:2px solid var(--ochre-deep);padding-left:14px;}
+  .proof-num{font-family:var(--serif);font-size:1.7rem;font-weight:700;color:var(--forest);display:block;line-height:1;}
+  .proof-label{font-size:0.85rem;color:var(--ink-soft);}
+
+  .thali-wrap{position:relative;}
+  .thali-caption{
+    position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);
+    font-size:0.8rem;color:var(--ink-soft);font-style:italic;font-family:var(--serif);
+    white-space:nowrap;
+  }
+
+  /* ---------- Insight band ---------- */
+  .band{background:var(--leaf-light);color:var(--ink);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .band .wrap{padding:52px 28px;}
+  .band-inner{display:flex;align-items:center;gap:28px;flex-wrap:wrap;justify-content:space-between;}
+  .band p.big{font-family:var(--serif);font-size:1.5rem;line-height:1.4;max-width:56ch;font-weight:500;color:var(--forest-deep);}
+  .band .tag{font-size:0.85rem;color:var(--clay);text-transform:none;letter-spacing:0.02em;margin-bottom:8px;display:block;font-weight:700;}
+
+  /* ---------- Section heads ---------- */
+  .section-head{max-width:64ch;margin-bottom:52px;}
+  .section-head h2{font-size:clamp(1.7rem,2.6vw,2.3rem);line-height:1.15;}
+  .section-head p{margin-top:14px;color:var(--ink-soft);font-size:1.05rem;}
+
+  /* ---------- Three plates comparison ---------- */
+  .plates{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+  .plate-card{
+    background:var(--parchment-card);border-radius:var(--radius-m);
+    padding:32px 28px;border:1px solid var(--line);
+    display:flex;flex-direction:column;gap:16px;
+  }
+  .plate-card.featured{background:var(--leaf-light);color:var(--ink);border-color:var(--forest);border-width:2px;}
+  .plate-icon{width:44px;height:44px;}
+  .plate-card h3{font-size:1.2rem;}
+  .plate-card .fails,.plate-card .wins{font-size:0.95rem;color:var(--ink-soft);line-height:1.55;}
+  .plate-card.featured .wins{color:var(--ink-soft);}
+  .plate-card.featured h3{color:var(--forest-deep);}
+
+  /* ---------- Process ---------- */
+  .process{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;}
+  .process::before{
+    content:"";position:absolute;top:26px;left:6%;right:6%;height:1px;
+    background:repeating-linear-gradient(to right, var(--line) 0 8px, transparent 8px 16px);
+  }
+  .step{position:relative;padding-right:24px;}
+  .step-num{
+    width:52px;height:52px;border-radius:50%;background:var(--parchment);
+    border:2px solid var(--ochre-deep);display:flex;align-items:center;justify-content:center;
+    font-family:var(--serif);font-weight:700;font-size:1.15rem;color:var(--forest);
+    margin-bottom:20px;position:relative;z-index:1;
+  }
+  .step h3{font-size:1.05rem;margin-bottom:8px;}
+  .step p{color:var(--ink-soft);font-size:0.95rem;line-height:1.55;}
+
+  /* ---------- Menu tabs ---------- */
+  .menu-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:36px;}
+  .tab-btn{
+    padding:10px 20px;border-radius:999px;border:1px solid var(--line);
+    background:var(--parchment);font-family:var(--sans);font-weight:600;font-size:0.92rem;
+    color:var(--ink-soft);cursor:pointer;transition:all .15s ease;
+  }
+  .tab-btn.active{background:var(--forest);color:#FFFFFF;border-color:var(--forest);}
+  .menu-panel{display:none;}
+  .menu-panel.active{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start;}
+  .menu-panel .dishes{display:grid;gap:14px;}
+  .dish-row{
+    display:flex;justify-content:space-between;gap:16px;padding:14px 0;
+    border-bottom:1px solid var(--line);font-size:0.98rem;
+  }
+  .dish-row .name{font-weight:600;}
+  .dish-row .meal{color:var(--ink-soft);font-size:0.86rem;}
+  .menu-note{
+    background:var(--leaf-light);border-radius:var(--radius-m);padding:28px;
+    border:1px solid var(--line);
+  }
+  .menu-note h4{font-family:var(--serif);font-size:1.15rem;font-weight:600;margin-bottom:10px;color:var(--forest-deep);}
+  .menu-note p{color:var(--ink-soft);font-size:0.95rem;line-height:1.6;}
+  .menu-note .quote{font-family:var(--serif);font-style:italic;font-size:1.05rem;color:var(--ink);margin-top:16px;line-height:1.5;}
+
+  /* ---------- Sourcing ---------- */
+  .sourcing{display:grid;grid-template-columns:0.9fr 1.1fr;gap:56px;align-items:center;}
+  .radius-fact{display:flex;gap:22px;margin-top:28px;flex-wrap:wrap;}
+  .radius-item{flex:1;min-width:140px;}
+  .radius-item .num{font-family:var(--serif);font-size:2rem;font-weight:700;color:var(--clay);display:block;}
+  .radius-item .lbl{font-size:0.88rem;color:var(--ink-soft);margin-top:4px;}
+
+  /* ---------- Plans ---------- */
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+  .plan-card{
+    border:1px solid var(--line);border-radius:var(--radius-m);padding:32px 28px;
+    background:var(--parchment-card);display:flex;flex-direction:column;
+  }
+  .plan-card.mid{border-color:var(--ochre-deep);border-width:2px;position:relative;background:var(--leaf-light);box-shadow:0 18px 40px -22px rgba(18,38,28,0.2);}
+  .plan-badge{
+    position:absolute;top:-13px;left:28px;background:var(--ochre);color:var(--ink);
+    font-size:0.76rem;font-weight:700;padding:5px 14px;border-radius:999px;
+  }
+  .plan-card h3{font-size:1.2rem;}
+  .plan-price{font-family:var(--serif);font-size:2.1rem;font-weight:700;margin:14px 0 4px;color:var(--forest-deep);}
+  .plan-price span{font-size:1rem;font-weight:500;color:var(--ink-soft);font-family:var(--sans);}
+  .plan-desc{color:var(--ink-soft);font-size:0.92rem;margin-bottom:20px;}
+  .plan-feats{list-style:none;margin:0 0 26px;padding:0;display:grid;gap:10px;font-size:0.92rem;}
+  .plan-feats li{display:flex;gap:10px;align-items:flex-start;color:var(--ink-soft);}
+  .plan-feats li svg{flex:none;width:16px;height:16px;margin-top:3px;color:var(--forest);}
+  .plan-cta{margin-top:auto;text-align:center;padding:13px;border-radius:999px;border:1px solid var(--forest);color:var(--forest);text-decoration:none;font-weight:600;font-size:0.94rem;}
+  .plan-card.mid .plan-cta{background:var(--forest);color:#FFFFFF;border-color:var(--forest);}
+
+  /* ---------- Testimonials ---------- */
+  .testimonials{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+  .t-card{background:var(--parchment-card);border-radius:var(--radius-m);padding:30px 26px;border:1px solid var(--line);}
+  .t-card p.quote{font-family:var(--serif);font-style:italic;font-size:1.05rem;line-height:1.55;color:var(--ink);}
+  .t-card .who{margin-top:18px;font-size:0.85rem;color:var(--ink-soft);}
+
+  /* ---------- Waitlist / footer CTA ---------- */
+  .cta-band{background:var(--leaf-light);color:var(--ink);border-top:1px solid var(--line);}
+  .cta-inner{text-align:center;max-width:620px;margin:0 auto;}
+  .cta-inner h2{color:var(--forest-deep);font-size:clamp(1.8rem,3vw,2.5rem);}
+  .cta-inner p{color:var(--ink-soft);margin-top:16px;font-size:1.05rem;}
+  .waitlist-form{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap;justify-content:center;}
+  .waitlist-form input[type="email"]{
+    flex:1;min-width:220px;max-width:320px;padding:13px 18px;border-radius:999px;
+    border:1px solid var(--line);background:var(--parchment);
+    color:var(--ink);font-family:var(--sans);font-size:0.95rem;
+  }
+  .waitlist-form input[type="email"]::placeholder{color:var(--ink-soft);}
+  .waitlist-form input[type="email"]:focus{outline:2px solid var(--ochre-deep);outline-offset:2px;}
+  .waitlist-msg{margin-top:16px;font-size:0.9rem;color:var(--clay);min-height:20px;font-weight:600;}
+  .cities-line{margin-top:22px;font-size:0.85rem;color:var(--ink-soft);}
+
+  footer.site{padding:56px 0 40px;background:var(--parchment);}
+  .footer-grid{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:40px;}
+  .footer-brand{max-width:280px;}
+  .footer-brand .brand{margin-bottom:14px;}
+  .footer-brand p{color:var(--ink-soft);font-size:0.9rem;line-height:1.6;}
+  .footer-cols{display:flex;gap:56px;flex-wrap:wrap;}
+  .footer-col h4{font-size:0.85rem;font-weight:700;margin-bottom:14px;color:var(--ink);}
+  .footer-col a{display:block;color:var(--ink-soft);text-decoration:none;font-size:0.9rem;margin-bottom:10px;}
+  .footer-col a:hover{color:var(--ink);}
+  .footer-bottom{margin-top:40px;font-size:0.82rem;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+
+  a:focus-visible, button:focus-visible, input:focus-visible{outline:2px solid var(--ochre-deep);outline-offset:3px;}
+
+  @media (max-width:860px){
+    .navlinks{display:none;}
+    .hero-grid{grid-template-columns:1fr;}
+    .thali-wrap{order:-1;max-width:320px;margin:0 auto 20px;}
+    .plates{grid-template-columns:1fr;}
+    .process{grid-template-columns:1fr;gap:36px;}
+    .process::before{display:none;}
+    .menu-panel.active{grid-template-columns:1fr;}
+    .sourcing{grid-template-columns:1fr;}
+    .plans{grid-template-columns:1fr;}
+    .testimonials{grid-template-columns:1fr;}
+    .band-inner{flex-direction:column;align-items:flex-start;}
+    section{padding:64px 0;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{transition:none !important;animation:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="nav">
+    <a href="#top" class="brand">
+      <svg class="leaf" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M4 13c0-6 5-9.5 15-9.5C19 13 15 18 8.5 18 6 18 4 16 4 13Z" fill="var(--forest)"/>
+        <path d="M5 18c2-3 5-6 12-9" stroke="var(--ochre-deep)" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+      GreenPlate
+    </a>
+    <nav class="navlinks" aria-label="Primary">
+      <a href="#menus">Regional menus</a>
+      <a href="#how">How it works</a>
+      <a href="#plans">Plans</a>
+      <a href="#story">Sourcing</a>
+    </nav>
+    <a href="#join" class="navcta">Start your plan</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="kicker">A subscription, not an app you open every day</span>
+        <h1>The plate you grew up with, from the fields around you now.</h1>
+        <p class="sub">GreenPlate cooks home-style regional Indian food — Karnataka, Tamil, Bengali and Gujarati thalis — entirely from plant-based ingredients sourced within 50&nbsp;km of our kitchen, and brings it to your door every day. No deciding what's for dinner. No mystery about where it came from.</p>
+        <div class="hero-ctas">
+          <a href="#join" class="btn btn-primary">Start your plan</a>
+          <a href="#menus" class="btn btn-ghost">See this week's thali</a>
+        </div>
+        <div class="hero-proof">
+          <div class="proof-item">
+            <span class="proof-num">240</span>
+            <span class="proof-label">paying subscribers, Bengaluru pilot</span>
+          </div>
+          <div class="proof-item">
+            <span class="proof-num">70%+</span>
+            <span class="proof-label">weekly retention after month one</span>
+          </div>
+          <div class="proof-item">
+            <span class="proof-num">50 km</span>
+            <span class="proof-label">sourcing radius, every kitchen</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="thali-wrap">
+        <svg viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of a steel thali plate with compartments of regional dishes">
+          <circle cx="180" cy="180" r="172" fill="var(--ochre)" opacity="0.16"/>
+          <circle cx="180" cy="180" r="150" fill="var(--parchment-card)" stroke="var(--forest)" stroke-width="2"/>
+          <circle cx="180" cy="180" r="150" fill="none" stroke="var(--ochre-deep)" stroke-width="1" stroke-dasharray="2 6"/>
+          <!-- center bowl -->
+          <circle cx="180" cy="180" r="46" fill="var(--forest)"/>
+          <circle cx="180" cy="180" r="46" fill="none" stroke="var(--ochre)" stroke-width="1.5"/>
+          <path d="M158 172c6 10 38 10 44 0" stroke="var(--parchment)" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <circle cx="168" cy="164" r="3" fill="var(--parchment)"/>
+          <circle cx="192" cy="164" r="3" fill="var(--parchment)"/>
+          <!-- compartments -->
+          <g>
+            <circle cx="180" cy="72" r="30" fill="var(--parchment)" stroke="var(--forest)" stroke-width="1.6"/>
+            <circle cx="180" cy="72" r="10" fill="var(--clay)"/>
+            <circle cx="180" cy="72" r="10" fill="none" stroke="var(--forest)" stroke-width="1"/>
+          </g>
+          <g>
+            <circle cx="270" cy="120" r="28" fill="var(--parchment)" stroke="var(--forest)" stroke-width="1.6"/>
+            <rect x="255" y="106" width="30" height="28" rx="4" fill="var(--forest)" opacity="0.75"/>
+          </g>
+          <g>
+            <circle cx="288" cy="220" r="28" fill="var(--parchment)" stroke="var(--forest)" stroke-width="1.6"/>
+            <ellipse cx="288" cy="220" rx="13" ry="9" fill="var(--ochre)"/>
+          </g>
+          <g>
+            <circle cx="230" cy="286" r="28" fill="var(--parchment)" stroke="var(--forest)" stroke-width="1.6"/>
+            <path d="M216 292c4-14 22-14 26 0" fill="var(--clay)"/>
+          </g>
+          <g>
+            <circle cx="140" cy="292" r="26" fill="var(--parchment)" stroke="var(--forest)" stroke-width="1.6"/>
+            <circle cx="140" cy="292" r="9" fill="var(--forest)" opacity="0.7"/>
+          </g>
+          <g>
+            <circle cx="86" cy="234" r="26" fill="var(--parchment)" stroke="var(--forest)" stroke-width="1.6"/>
+            <rect x="74" y="224" width="24" height="20" rx="3" fill="var(--ochre)" opacity="0.85"/>
+          </g>
+          <g>
+            <circle cx="80" cy="130" r="26" fill="var(--parchment)" stroke="var(--forest)" stroke-width="1.6"/>
+            <path d="M68 134c4-12 20-12 24 0" fill="var(--forest)" opacity="0.7"/>
+          </g>
+        </svg>
+        <span class="thali-caption">Today's Karnataka plan, plated the way it's delivered</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSIGHT BAND -->
+  <section class="band">
+    <div class="wrap">
+      <div class="band-inner">
+        <div>
+          <span class="tag">What we heard from 168 pilot subscribers</span>
+          <p class="big">"It's the first time in two years of living in Bengaluru that food has arrived at my door and actually tasted like it was made by someone from home."</p>
+        </div>
+        <div style="max-width:220px;">
+          <span class="proof-num" style="color:var(--clay);">17:1</span>
+          <span class="proof-label">pilot-stage LTV:CAC, on a contribution-margin basis</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM: THREE PLATES -->
+  <section id="problem">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Three ways to eat away from home. Only one of them actually tastes like it.</h2>
+        <p>Delivery apps optimise for variety and speed. Tiffin services optimise for price. Neither optimises for the thing our members actually miss.</p>
+      </div>
+      <div class="plates">
+        <div class="plate-card">
+          <svg class="plate-icon" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="20" stroke="var(--clay)" stroke-width="2"/><path d="M14 22h16M14 16h10M14 28h13" stroke="var(--clay)" stroke-width="2" stroke-linecap="round"/></svg>
+          <h3>Delivery apps</h3>
+          <p class="fails">Huge variety, ten-minute speed — built for occasion eating, not everyday eating. Heavier on oil and salt because that travels well, and rarely the same meal twice. ₹180–350 a plate makes daily use expensive.</p>
+        </div>
+        <div class="plate-card">
+          <svg class="plate-icon" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="20" stroke="var(--clay)" stroke-width="2"/><path d="M22 12v20M12 22h20" stroke="var(--clay)" stroke-width="2" stroke-linecap="round"/></svg>
+          <h3>Tiffin &amp; mess services</h3>
+          <p class="fails">Genuinely home-style, genuinely affordable — but run over a phone call and a paper ledger. No visibility into sourcing, inconsistent hygiene, and nobody to hold accountable when something goes wrong.</p>
+        </div>
+        <div class="plate-card featured">
+          <svg class="plate-icon" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="20" stroke="var(--ochre-deep)" stroke-width="2"/><path d="M15 23l5 5 9-11" stroke="var(--ochre-deep)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h3>GreenPlate</h3>
+          <p class="wins">A rotating regional menu, sourced from named farms within 50&nbsp;km, cooked by cooks who grew up on that cuisine, on a subscription that just shows up — priced below ad-hoc ordering, above unbranded tiffin.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how" style="background:var(--parchment-card);">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>From a farm you could name to your door, most days by the same route.</h2>
+        <p>The week's menu is planned around what actually came in that morning — not a fixed recipe book.</p>
+      </div>
+      <div class="process">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Choose your plate</h3>
+          <p>Pick a home region — Karnataka, Tamil, Bengal or Gujarat — and a plan of 5, 10 or 14 meals a week.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>We source that morning</h3>
+          <p>12–18 farms and FPOs per city deliver the same or previous evening, at pre-agreed seasonal rates.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Regional cooks plan the week</h3>
+          <p>Cooks recruited for that cuisine build the rotation around what's actually in season, not a script.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <h3>Delivered on your window</h3>
+          <p>Breakfast, lunch or dinner, within 7&nbsp;km of the kitchen. Skip, pause or swap up to 6 hours ahead.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENUS -->
+  <section id="menus">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>A menu built around a region, not a diet.</h2>
+        <p>Every plate is plant-based by default — not a restriction we advertise, just how we source and cook. Kerala and Punjab menus are next.</p>
+      </div>
+
+      <div class="menu-tabs" role="tablist" aria-label="Regional menus">
+        <button class="tab-btn active" data-tab="ka" role="tab" aria-selected="true">Karnataka</button>
+        <button class="tab-btn" data-tab="tn" role="tab" aria-selected="false">Tamil Nadu</button>
+        <button class="tab-btn" data-tab="bn" role="tab" aria-selected="false">Bengal</button>
+        <button class="tab-btn" data-tab="gj" role="tab" aria-selected="false">Gujarat</button>
+      </div>
+
+      <div class="menu-panel active" data-panel="ka">
+        <div class="dishes">
+          <div class="dish-row"><span class="name">Bisi bele bath, kosambari &amp; papad</span><span class="meal">Lunch</span></div>
+          <div class="dish-row"><span class="name">Ragi mudde with soppu saaru</span><span class="meal">Dinner</span></div>
+          <div class="dish-row"><span class="name">Avarekalu uppittu</span><span class="meal">Breakfast</span></div>
+          <div class="dish-row"><span class="name">Sorekayi palya &amp; curd rice</span><span class="meal">Lunch</span></div>
+        </div>
+        <div class="menu-note">
+          <h4>Standard plan · Karnataka</h4>
+          <p>Drumstick, avarekalu and sorekayi rotate in and out with the season — the dish names and rhythm of the week stay the same, which is what members told us matters most.</p>
+          <p class="quote">"Tastes like my hostel mess in Manipal, but the good version."</p>
+        </div>
+      </div>
+
+      <div class="menu-panel" data-panel="tn">
+        <div class="dishes">
+          <div class="dish-row"><span class="name">Sambar sadam &amp; vazhakkai chips</span><span class="meal">Lunch</span></div>
+          <div class="dish-row"><span class="name">Pongal with coconut chutney</span><span class="meal">Breakfast</span></div>
+          <div class="dish-row"><span class="name">Kara kuzhambu &amp; rice</span><span class="meal">Dinner</span></div>
+          <div class="dish-row"><span class="name">Rasam, poriyal &amp; appalam</span><span class="meal">Lunch</span></div>
+        </div>
+        <div class="menu-note">
+          <h4>Standard plan · Tamil Nadu</h4>
+          <p>Built around a Chennai-style everyday spread, sourced from the same 50&nbsp;km panel we use for the Karnataka menu.</p>
+          <p class="quote">"The first plate that's made me stop ordering in on weeknights."</p>
+        </div>
+      </div>
+
+      <div class="menu-panel" data-panel="bn">
+        <div class="dishes">
+          <div class="dish-row"><span class="name">Shukto with steamed rice</span><span class="meal">Lunch</span></div>
+          <div class="dish-row"><span class="name">Cholar dal &amp; luchi</span><span class="meal">Breakfast</span></div>
+          <div class="dish-row"><span class="name">Aloo posto &amp; dal</span><span class="meal">Dinner</span></div>
+          <div class="dish-row"><span class="name">Bhaja moong dal khichuri</span><span class="meal">Lunch</span></div>
+        </div>
+        <div class="menu-note">
+          <h4>Standard plan · Bengal</h4>
+          <p>One of our three pilot menus from day one — validated alongside Karnataka and Tamil in the 90-day Bengaluru cohort.</p>
+          <p class="quote">"I stopped calling my mother to ask how to make shukto. It just arrives now."</p>
+        </div>
+      </div>
+
+      <div class="menu-panel" data-panel="gj">
+        <div class="dishes">
+          <div class="dish-row"><span class="name">Undhiyu &amp; bajra rotla</span><span class="meal">Dinner</span></div>
+          <div class="dish-row"><span class="name">Thepla &amp; chhundo</span><span class="meal">Breakfast</span></div>
+          <div class="dish-row"><span class="name">Dal dhokli</span><span class="meal">Lunch</span></div>
+          <div class="dish-row"><span class="name">Handvo &amp; kadhi</span><span class="meal">Lunch</span></div>
+        </div>
+        <div class="menu-note">
+          <h4>Standard plan · Gujarat</h4>
+          <p>In development now, cooked by a Gujarati head cook, following the same seasonal-rotation model as our three launched menus.</p>
+          <p class="quote">Recruitment for this cuisine's regional head cook is underway — join the waitlist to hear first.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOURCING -->
+  <section id="story" style="background:var(--parchment-card);">
+    <div class="wrap sourcing">
+      <div>
+        <h2>Hyperlocal isn't a marketing word here. It's how we buy.</h2>
+        <p class="lede" style="margin-top:16px;color:var(--ink-soft);">Every kitchen keeps a standing panel of small and mid-sized farms and FPOs, refreshed weekly against the planned menu. We pay 8–15% above the nearest wholesale rate — a premium that buys predictability, quality control, and a sourcing story we can actually name.</p>
+        <div class="radius-fact">
+          <div class="radius-item"><span class="num">14</span><span class="lbl">farms in our current Bengaluru panel</span></div>
+          <div class="radius-item"><span class="num">2</span><span class="lbl">farmer producer organisations</span></div>
+          <div class="radius-item"><span class="num">50 km</span><span class="lbl">maximum sourcing radius per kitchen</span></div>
+        </div>
+      </div>
+      <div>
+        <svg viewBox="0 0 420 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Radius diagram showing farms within 50 kilometres of a central kitchen">
+          <circle cx="210" cy="170" r="150" fill="none" stroke="var(--forest)" stroke-width="1.4" stroke-dasharray="3 7"/>
+          <circle cx="210" cy="170" r="150" fill="var(--ochre)" opacity="0.08"/>
+          <text x="210" y="26" text-anchor="middle" font-family="Work Sans, sans-serif" font-size="12" fill="var(--ink-soft)">50 km radius</text>
+          <circle cx="210" cy="170" r="14" fill="var(--forest)"/>
+          <text x="210" y="174" text-anchor="middle" font-family="Work Sans, sans-serif" font-size="9" fill="var(--parchment)" font-weight="700">Kitchen</text>
+          <g fill="var(--clay)">
+            <circle cx="150" cy="90" r="6"/><circle cx="290" cy="70" r="6"/><circle cx="330" cy="180" r="6"/>
+            <circle cx="290" cy="270" r="6"/><circle cx="150" cy="270" r="6"/><circle cx="100" cy="160" r="6"/>
+            <circle cx="240" cy="110" r="6"/><circle cx="120" cy="210" r="6"/>
+          </g>
+          <g stroke="var(--line)" stroke-width="1">
+            <line x1="210" y1="170" x2="150" y2="90"/><line x1="210" y1="170" x2="290" y2="70"/>
+            <line x1="210" y1="170" x2="330" y2="180"/><line x1="210" y1="170" x2="290" y2="270"/>
+            <line x1="210" y1="170" x2="150" y2="270"/><line x1="210" y1="170" x2="100" y2="160"/>
+            <line x1="210" y1="170" x2="240" y2="110"/><line x1="210" y1="170" x2="120" y2="210"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLANS -->
+  <section id="plans">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Priced to beat ordering in — not to be the cheapest plate in town.</h2>
+        <p>Weekly billing via UPI Autopay. Skip any day up to 6 hours ahead, no charge. No minimum term on any plan below.</p>
+      </div>
+      <div class="plans">
+        <div class="plan-card">
+          <h3>Starter</h3>
+          <div class="plan-price">5 <span>meals / week</span></div>
+          <p class="plan-desc">One region, one daily window. Built for someone testing whether a subscription fits their week.</p>
+          <ul class="plan-feats">
+            <li><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Choice of one regional menu</li>
+            <li><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Compostable packaging included</li>
+            <li><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Pause or cancel anytime</li>
+          </ul>
+          <a href="#join" class="plan-cta">Choose Starter</a>
+        </div>
+        <div class="plan-card mid">
+          <span class="plan-badge">Most subscribed in pilot</span>
+          <h3>Standard</h3>
+          <div class="plan-price">10 <span>meals / week</span></div>
+          <p class="plan-desc">Lunch and dinner, most weekdays. The plan our Bengaluru pilot members converge on.</p>
+          <ul class="plan-feats">
+            <li><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Steel tiffin carrier option, ₹500 refundable deposit</li>
+            <li><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Spice-level customisation at sign-up</li>
+            <li><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Skip, pause or swap 6 hours ahead</li>
+          </ul>
+          <a href="#join" class="plan-cta">Choose Standard</a>
+        </div>
+        <div class="plan-card">
+          <h3>Premium</h3>
+          <div class="plan-price">14 <span>meals / week</span></div>
+          <p class="plan-desc">Breakfast, lunch and dinner covered most days — for members who want to stop deciding entirely.</p>
+          <ul class="plan-feats">
+            <li><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Priority delivery windows</li>
+            <li><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Full nutrition &amp; allergen labelling</li>
+            <li><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Same-day credit on any flagged meal</li>
+          </ul>
+          <a href="#join" class="plan-cta">Choose Premium</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section style="background:var(--parchment-card);">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>What pilot members told us</h2>
+        <p>From our Appendix A survey of 168 active subscribers, lightly edited for length.</p>
+      </div>
+      <div class="testimonials">
+        <div class="t-card">
+          <p class="quote">"It's the first time in two years of living in Bengaluru that food has arrived at my door and actually tasted like it was made by someone from home, not a restaurant trying to be everything to everyone."</p>
+          <p class="who">Standard plan subscriber, 8 months in Bengaluru</p>
+        </div>
+        <div class="t-card">
+          <p class="quote">"I skip a lot of meals because deciding what to order is exhausting after work. Now I don't have to decide — I decided on Sunday for the whole week."</p>
+          <p class="who">Premium plan subscriber, product manager</p>
+        </div>
+        <div class="t-card">
+          <p class="quote">"I wish the packaging was steel more often, I keep forgetting to request it — that's on me, not you."</p>
+          <p class="who">Starter plan subscriber, student</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA / WAITLIST -->
+  <section class="cta-band" id="join">
+    <div class="wrap">
+      <div class="cta-inner">
+        <h2>Bengaluru today. Pune and Hyderabad next.</h2>
+        <p>Leave your email and we'll tell you the moment GreenPlate delivers in your neighbourhood, plus first access to the Gujarati and Kerala menus.</p>
+        <form class="waitlist-form" id="waitlistForm">
+          <label for="email" class="visually-hidden" style="position:absolute;left:-9999px;">Email address</label>
+          <input type="email" id="email" name="email" placeholder="you@email.com" required>
+          <button type="submit" class="btn btn-primary">Join the waitlist</button>
+        </form>
+        <p class="waitlist-msg" id="waitlistMsg" role="status" aria-live="polite"></p>
+        <p class="cities-line">Currently delivering across Bengaluru · Pune and Hyderabad launching within 18 months</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#top" class="brand">
+          <svg class="leaf" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M4 13c0-6 5-9.5 15-9.5C19 13 15 18 8.5 18 6 18 4 16 4 13Z" fill="var(--forest)"/>
+            <path d="M5 18c2-3 5-6 12-9" stroke="var(--ochre-deep)" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+          GreenPlate
+        </a>
+        <p>GreenPlate Foods Pvt. Ltd. — a hyperlocal, plant-based subscription meal service for people living away from home. Bengaluru, Karnataka.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="#menus">Regional menus</a>
+          <a href="#plans">Plans &amp; pricing</a>
+          <a href="#how">How it works</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#story">Our sourcing</a>
+          <a href="#">FSSAI &amp; food safety</a>
+          <a href="#">Careers</a>
+        </div>
+        <div class="footer-col">
+          <h4>Get in touch</h4>
+          <a href="mailto:hello@greenplate.in">hello@greenplate.in</a>
+          <a href="#join">Join the waitlist</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 GreenPlate Foods Pvt. Ltd.</span>
+      <span>Bengaluru, Karnataka, India</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Tabs
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.menu-panel');
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      panels.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected','true');
+      const target = document.querySelector('.menu-panel[data-panel="' + btn.dataset.tab + '"]');
+      if (target) target.classList.add('active');
+    });
+  });
+
+  // Waitlist form — local-only confirmation, no backend to send data to
+  const form = document.getElementById('waitlistForm');
+  const msg = document.getElementById('waitlistMsg');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    if (email) {
+      msg.textContent = "You're on the list — we'll email " + email + " as soon as we launch near you.";
+      form.reset();
+    }
+  });
+</script>
+
+</body>
+</html>
